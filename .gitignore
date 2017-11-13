@@ -1,0 +1,11 @@
+**/.idea/
+**/.gradle/
+**/out/
+testResults/
+*.class
+*.jar
+**/tmp
+*.db
+**/maven/
+**/build/
+*.iml
