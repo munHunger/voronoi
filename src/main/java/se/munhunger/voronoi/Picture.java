@@ -9,7 +9,7 @@ import java.util.Random;
  * @author Marcus Münger
  */
 public class Picture implements Comparable<Picture> {
-    public static final int REGION_COUNT = 50;
+    public static final int REGION_COUNT = 15;
 
     public float regions[] = new float[REGION_COUNT*5];
 
@@ -55,10 +55,8 @@ public class Picture implements Comparable<Picture> {
 
     public static Picture splice(Picture a, Picture b) {
         Picture n = new Picture();
-        for(int i = 0; i < a.regions.length / 2; i++)
-            n.regions[i] = a.regions[i];
-        for(int i = b.regions.length / 2; i < b.regions.length; i++)
-            n.regions[i] = b.regions[i];
+        for(int i = 0; i < a.regions.length; i++)
+            n.regions[i] = random.nextBoolean() ? a.regions[i] : b.regions[i];
         return n;
     }
 

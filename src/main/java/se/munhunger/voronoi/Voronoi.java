@@ -11,6 +11,7 @@ import java.io.IOException;
  */
 public class Voronoi {
     public static BufferedImage image;
+    public static BufferedImage originalImage;
     public static BufferedImage paintedImage;
 
     private static JLabel ref;
@@ -20,16 +21,15 @@ public class Voronoi {
     private static Generation generation;
 
     public static void main(String[] args) throws IOException {
-        BufferedImage original = ImageIO.read(Voronoi.class.getClassLoader().getResource("ref1.jpg"));
-        image = new BufferedImage(original.getWidth() / 40, original.getHeight() / 40, BufferedImage.TYPE_INT_RGB);
-        image.getGraphics().drawImage(original, 0, 0, image.getWidth(), image.getHeight(), null);
+        originalImage = ImageIO.read(Voronoi.class.getClassLoader().getResource("ref1.jpg"));
+        image = new BufferedImage(originalImage.getWidth() / 20, originalImage.getHeight() / 20, BufferedImage.TYPE_INT_RGB);
+        image.getGraphics().drawImage(originalImage, 0, 0, image.getWidth(), image.getHeight(), null);
         generation = new Generation();
         generation.initialize();
-        generation.step(100);
+        generation.step(1);
         Picture best = generation.getBest();
 
-        image = original;
-        paintedImage = best.toImage(image.getWidth(), image.getHeight());
+        paintedImage = best.toImage(originalImage.getWidth(), originalImage.getHeight());
         JFrame frame = new JFrame("Voronoi painter");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1600, 800);
@@ -40,40 +40,37 @@ public class Voronoi {
 
         JPanel images = new JPanel();
         images.setLayout(new BoxLayout(images, BoxLayout.LINE_AXIS));
-        ref = new JLabel(new ImageIcon(image));
+        ref = new JLabel(new ImageIcon(originalImage));
         result = new JLabel(new ImageIcon(paintedImage));
         images.add(result);
         images.add(ref);
 
         panel.add(images);
 
-        similarity = new JLabel(String.format("Similarity: %d%%", (int)(calcSimilarity(image, paintedImage) * 100)));
+        similarity = new JLabel(String.format("Similarity: %d%%", (int)(calcSimilarity(originalImage, paintedImage) * 100)));
         panel.add(similarity);
 
         JButton stepButton = new JButton("Step");
         stepButton.addActionListener(e -> {
-            for(int i = 0; i < 100; i++) {
-                BufferedImage org = image;
-                image = new BufferedImage(original.getWidth() / 40, original.getHeight() / 40,
-                                          BufferedImage.TYPE_INT_RGB);
-                image.getGraphics().drawImage(original, 0, 0, image.getWidth(), image.getHeight(), null);
-                generation.step(100);
+            new Thread(() -> {
+                for(int i = 0; i < 100; i++) {
+                    generation.step(10);
 
-                Picture bestInGen = generation.getBest();
+                    Picture bestInGen = generation.getBest();
 
-                image = org;
-                paintedImage = bestInGen.toImage(image.getWidth(), image.getHeight());
+                    paintedImage = bestInGen.toImage(originalImage.getWidth(), originalImage.getHeight());
 
-                EventQueue.invokeLater(() ->
-                                       {
-                                           ref.setIcon(new ImageIcon(image));
-                                           result.setIcon(new ImageIcon(paintedImage));
-                                           similarity.setText(String.format("Similarity and stuff: %d%%",
-                                                                            (int) (calcSimilarity(image,
-                                                                                                  paintedImage) * 100)));
+                    EventQueue.invokeLater(() ->
+                                           {
+                                               ref.setIcon(new ImageIcon(originalImage));
+                                               result.setIcon(new ImageIcon(paintedImage));
+                                               similarity.setText(String.format("Similarity: %d%% \tGenCount: %d",
+                                                                                (int) (calcSimilarity(originalImage,
+                                                                                                      paintedImage) * 100), generation.genCount));
 
-                                       });
-            }
+                                           });
+                }
+            }).start();
         });
         panel.add(stepButton);
 
