@@ -25,7 +25,7 @@ public class Voronoi {
     public static void main(String[] args) throws IOException {
         iconPanel = new JPanel(new GridLayout(10, 10));
         originalImage = ImageIO.read(Voronoi.class.getClassLoader().getResource("ref1.jpg"));
-        image = new BufferedImage(originalImage.getWidth() / 20, originalImage.getHeight() / 20, BufferedImage.TYPE_INT_RGB);
+        image = new BufferedImage(originalImage.getWidth() / 4, originalImage.getHeight() / 4, BufferedImage.TYPE_INT_RGB);
         image.getGraphics().drawImage(originalImage, 0, 0, image.getWidth(), image.getHeight(), null);
         generation = new Generation();
         generation.initialize();
