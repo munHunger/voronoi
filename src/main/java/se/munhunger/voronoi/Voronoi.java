@@ -15,10 +15,8 @@ public class Voronoi {
 
     public static void main(String[] args) throws IOException {
         image = ImageIO.read(Voronoi.class.getClassLoader().getResource("ref1.jpg"));
-        paintedImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_INT_ARGB);
-
-        paintedImage.getGraphics().setColor(Color.BLUE);
-        paintedImage.getGraphics().fillRect(0,0,paintedImage.getWidth(), paintedImage.getHeight());
+        Picture picture = Picture.generateRandom();
+        paintedImage = picture.toImage(image.getWidth(), image.getHeight());
 
         JFrame frame = new JFrame("Voronoi painter");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
