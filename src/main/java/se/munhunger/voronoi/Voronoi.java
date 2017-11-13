@@ -18,9 +18,12 @@ public class Voronoi {
     private static JLabel result;
     private static JLabel similarity;
 
+    private static JPanel iconPanel;
+
     private static Generation generation;
 
     public static void main(String[] args) throws IOException {
+        iconPanel = new JPanel(new GridLayout(10, 10));
         originalImage = ImageIO.read(Voronoi.class.getClassLoader().getResource("ref1.jpg"));
         image = new BufferedImage(originalImage.getWidth() / 20, originalImage.getHeight() / 20, BufferedImage.TYPE_INT_RGB);
         image.getGraphics().drawImage(originalImage, 0, 0, image.getWidth(), image.getHeight(), null);
@@ -67,12 +70,17 @@ public class Voronoi {
                                                similarity.setText(String.format("Similarity: %d%% \tGenCount: %d",
                                                                                 (int) (calcSimilarity(originalImage,
                                                                                                       paintedImage) * 100), generation.genCount));
-
+                                                iconPanel.removeAll();
+                                                for(int x = 0; x < 10; x++)
+                                                    for(int y = 0; y < 10; y++)
+                                                        iconPanel.add(new JLabel(new ImageIcon(generation.generation[x+y].toImage(60, 60))));
+                                                frame.pack();
                                            });
                 }
             }).start();
         });
         panel.add(stepButton);
+        panel.add(iconPanel);
 
         frame.pack();
         frame.setVisible(true);
