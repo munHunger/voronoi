@@ -14,12 +14,16 @@ public class Voronoi {
     public static BufferedImage paintedImage;
 
     public static void main(String[] args) throws IOException {
-        image = ImageIO.read(Voronoi.class.getClassLoader().getResource("ref1.jpg"));
+        BufferedImage original = ImageIO.read(Voronoi.class.getClassLoader().getResource("ref1.jpg"));
+        image = new BufferedImage(original.getWidth() / 40, original.getHeight() / 40, BufferedImage.TYPE_INT_RGB);
+        image.getGraphics().drawImage(original, 0, 0, image.getWidth(), image.getHeight(), null);
         Generation generation = new Generation();
         generation.initialize();
+        generation.step(10);
         Picture best = generation.getBest();
-        paintedImage = best.toImage(image.getWidth(), image.getHeight());
 
+        image = original;
+        paintedImage = best.toImage(image.getWidth(), image.getHeight());
         JFrame frame = new JFrame("Voronoi painter");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(1600, 800);

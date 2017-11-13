@@ -2,12 +2,13 @@ package se.munhunger.voronoi;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
+import java.util.Arrays;
 import java.util.Random;
 
 /**
  * @author Marcus Münger
  */
-public class Picture {
+public class Picture implements Comparable<Picture> {
     public static final int REGION_COUNT = 50;
 
     public float regions[] = new float[REGION_COUNT*5];
@@ -43,5 +44,28 @@ public class Picture {
             }
         }
         return image;
+    }
+
+    public void mutate(float factor) {
+        for(int i = 0; i < regions.length; i++) {
+            float effect = (random.nextFloat() * factor) - factor/2;
+            regions[i] = Math.min(Math.max(regions[i] + effect, 0), 1);
+        }
+    }
+
+    public static Picture splice(Picture a, Picture b) {
+        Picture n = new Picture();
+        for(int i = 0; i < a.regions.length / 2; i++)
+            n.regions[i] = a.regions[i];
+        for(int i = b.regions.length / 2; i < b.regions.length; i++)
+            n.regions[i] = b.regions[i];
+        return n;
+    }
+
+    @Override
+    public int compareTo(Picture o) {
+        float thisSimilarity = Voronoi.calcSimilarity(toImage(Voronoi.image.getWidth(), Voronoi.image.getHeight()), Voronoi.image);
+        float otherSimilarity = Voronoi.calcSimilarity(o.toImage(Voronoi.image.getWidth(), Voronoi.image.getHeight()), Voronoi.image);
+        return Float.compare(thisSimilarity, otherSimilarity) * -1;
     }
 }
