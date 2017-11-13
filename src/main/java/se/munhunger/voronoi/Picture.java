@@ -15,6 +15,8 @@ public class Picture implements Comparable<Picture> {
 
     public static Random random = new Random(0l);
 
+    private float similarity = -1f;
+
     public static Picture generateRandom(){
         Picture picture = new Picture();
         for(int i = 0; i < picture.regions.length; i++) {
@@ -62,8 +64,10 @@ public class Picture implements Comparable<Picture> {
 
     @Override
     public int compareTo(Picture o) {
-        float thisSimilarity = Voronoi.calcSimilarity(toImage(Voronoi.image.getWidth(), Voronoi.image.getHeight()), Voronoi.image);
-        float otherSimilarity = Voronoi.calcSimilarity(o.toImage(Voronoi.image.getWidth(), Voronoi.image.getHeight()), Voronoi.image);
+        float thisSimilarity = similarity > 0 ? similarity : Voronoi.calcSimilarity(toImage(Voronoi.image.getWidth(), Voronoi.image.getHeight()), Voronoi.image);
+        float otherSimilarity = o.similarity > 0 ? o.similarity : Voronoi.calcSimilarity(o.toImage(Voronoi.image.getWidth(), Voronoi.image.getHeight()), Voronoi.image);
+        similarity = thisSimilarity;
+        o.similarity = otherSimilarity;
         return Float.compare(thisSimilarity, otherSimilarity) * -1;
     }
 }

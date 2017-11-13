@@ -1,9 +1,12 @@
 package se.munhunger.voronoi;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
 
 /**
@@ -34,6 +37,7 @@ public class Generation {
     private static ExecutorService threadPool = Executors.newFixedThreadPool(THREADS);
 
     public void step(int times){
+
         for(int i = 0; i < times; i++) {
             genCount++;
             System.out.println("Generating on step " + i);
