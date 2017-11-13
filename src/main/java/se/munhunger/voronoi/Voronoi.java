@@ -56,7 +56,7 @@ public class Voronoi {
         JButton stepButton = new JButton("Step");
         stepButton.addActionListener(e -> {
             new Thread(() -> {
-                for(int i = 0; i < 100; i++) {
+                while(true) {
                     generation.step(10);
 
                     Picture bestInGen = generation.getBest();
