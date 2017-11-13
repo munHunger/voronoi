@@ -13,13 +13,19 @@ public class Voronoi {
     public static BufferedImage image;
     public static BufferedImage paintedImage;
 
+    private static JLabel ref;
+    private static JLabel result;
+    private static JLabel similarity;
+
+    private static Generation generation;
+
     public static void main(String[] args) throws IOException {
         BufferedImage original = ImageIO.read(Voronoi.class.getClassLoader().getResource("ref1.jpg"));
         image = new BufferedImage(original.getWidth() / 40, original.getHeight() / 40, BufferedImage.TYPE_INT_RGB);
         image.getGraphics().drawImage(original, 0, 0, image.getWidth(), image.getHeight(), null);
-        Generation generation = new Generation();
+        generation = new Generation();
         generation.initialize();
-        generation.step(10);
+        generation.step(100);
         Picture best = generation.getBest();
 
         image = original;
@@ -34,14 +40,42 @@ public class Voronoi {
 
         JPanel images = new JPanel();
         images.setLayout(new BoxLayout(images, BoxLayout.LINE_AXIS));
-        JLabel ref = new JLabel(new ImageIcon(image));
-        JLabel result = new JLabel(new ImageIcon(paintedImage));
+        ref = new JLabel(new ImageIcon(image));
+        result = new JLabel(new ImageIcon(paintedImage));
         images.add(result);
         images.add(ref);
 
         panel.add(images);
 
-        panel.add(new JLabel(String.format("Similarity: %d%%", (int)(calcSimilarity(image, paintedImage) * 100))));
+        similarity = new JLabel(String.format("Similarity: %d%%", (int)(calcSimilarity(image, paintedImage) * 100)));
+        panel.add(similarity);
+
+        JButton stepButton = new JButton("Step");
+        stepButton.addActionListener(e -> {
+            for(int i = 0; i < 100; i++) {
+                BufferedImage org = image;
+                image = new BufferedImage(original.getWidth() / 40, original.getHeight() / 40,
+                                          BufferedImage.TYPE_INT_RGB);
+                image.getGraphics().drawImage(original, 0, 0, image.getWidth(), image.getHeight(), null);
+                generation.step(100);
+
+                Picture bestInGen = generation.getBest();
+
+                image = org;
+                paintedImage = bestInGen.toImage(image.getWidth(), image.getHeight());
+
+                EventQueue.invokeLater(() ->
+                                       {
+                                           ref.setIcon(new ImageIcon(image));
+                                           result.setIcon(new ImageIcon(paintedImage));
+                                           similarity.setText(String.format("Similarity and stuff: %d%%",
+                                                                            (int) (calcSimilarity(image,
+                                                                                                  paintedImage) * 100)));
+
+                                       });
+            }
+        });
+        panel.add(stepButton);
 
         frame.pack();
         frame.setVisible(true);
