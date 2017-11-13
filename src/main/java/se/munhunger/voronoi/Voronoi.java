@@ -52,34 +52,29 @@ public class Voronoi {
 
         similarity = new JLabel(String.format("Similarity: %d%%", (int)(calcSimilarity(originalImage, paintedImage) * 100)));
         panel.add(similarity);
+        new Thread(() -> {
+            while(true) {
+                generation.step(10);
 
-        JButton stepButton = new JButton("Step");
-        stepButton.addActionListener(e -> {
-            new Thread(() -> {
-                while(true) {
-                    generation.step(10);
+                Picture bestInGen = generation.getBest();
 
-                    Picture bestInGen = generation.getBest();
+                paintedImage = bestInGen.toImage(originalImage.getWidth(), originalImage.getHeight());
 
-                    paintedImage = bestInGen.toImage(originalImage.getWidth(), originalImage.getHeight());
-
-                    EventQueue.invokeLater(() ->
-                                           {
-                                               ref.setIcon(new ImageIcon(originalImage));
-                                               result.setIcon(new ImageIcon(paintedImage));
-                                               similarity.setText(String.format("Similarity: %d%% \tGenCount: %d",
-                                                                                (int) (calcSimilarity(originalImage,
-                                                                                                      paintedImage) * 100), generation.genCount));
-                                                iconPanel.removeAll();
-                                                for(int x = 0; x < 10; x++)
-                                                    for(int y = 0; y < 10; y++)
-                                                        iconPanel.add(new JLabel(new ImageIcon(generation.generation[x+y].toImage(60, 60))));
-                                                frame.pack();
-                                           });
-                }
-            }).start();
-        });
-        panel.add(stepButton);
+                EventQueue.invokeLater(() ->
+                                       {
+                                           ref.setIcon(new ImageIcon(originalImage));
+                                           result.setIcon(new ImageIcon(paintedImage));
+                                           similarity.setText(String.format("Similarity: %d%% \tGenCount: %d",
+                                                                            (int) (calcSimilarity(originalImage,
+                                                                                                  paintedImage) * 100), generation.genCount));
+                                           iconPanel.removeAll();
+                                           for(int x = 0; x < 10; x++)
+                                               for(int y = 0; y < 10; y++)
+                                                   iconPanel.add(new JLabel(new ImageIcon(generation.generation[x+y].toImage(60, 60))));
+                                           frame.pack();
+                                       });
+            }
+        }).start();
         panel.add(iconPanel);
 
         frame.pack();
