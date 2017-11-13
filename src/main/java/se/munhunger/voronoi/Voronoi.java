@@ -15,8 +15,10 @@ public class Voronoi {
 
     public static void main(String[] args) throws IOException {
         image = ImageIO.read(Voronoi.class.getClassLoader().getResource("ref1.jpg"));
-        Picture picture = Picture.generateRandom();
-        paintedImage = picture.toImage(image.getWidth(), image.getHeight());
+        Generation generation = new Generation();
+        generation.initialize();
+        Picture best = generation.getBest();
+        paintedImage = best.toImage(image.getWidth(), image.getHeight());
 
         JFrame frame = new JFrame("Voronoi painter");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
