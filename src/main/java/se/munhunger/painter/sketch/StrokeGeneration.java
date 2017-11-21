@@ -59,7 +59,7 @@ public class StrokeGeneration implements Generation {
         {
             s.fitness = Validator.calcSimilarity(generateImage(s, stepSize), Painter.originalImage);
         }
-        generation.sort((s1, s2) -> Float.compare(s1.fitness, s2.fitness));
+        generation.sort((s1, s2) -> Float.compare(s2.fitness, s1.fitness));
     }
 
     @Override

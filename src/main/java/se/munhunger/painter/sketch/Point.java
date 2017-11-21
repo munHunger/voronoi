@@ -34,4 +34,8 @@ public class Point {
     public Point getProgress(Point other, float progress) {
         return new Point(x + (other.x - x) * progress, y + (other.y - y) * progress);
     }
+
+    public Point clone() {
+        return new Point(x, y);
+    }
 }

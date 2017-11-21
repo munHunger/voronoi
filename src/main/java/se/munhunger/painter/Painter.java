@@ -51,7 +51,7 @@ public class Painter {
         panel.add(similarity);
         new Thread(() -> {
             while(true) {
-                generation.step(10);
+                generation.step(1);
 
                 paintedImage = generation.getBest(originalImage.getWidth(), originalImage.getHeight());
 

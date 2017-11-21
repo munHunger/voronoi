@@ -18,8 +18,21 @@ public class Stroke implements Comparable<Stroke> {
     public float g;
     public float b;
     public float a;
+    public float size;
 
     public float fitness = -1f;
+
+    public Stroke clone() {
+        Stroke clone = new Stroke();
+        for(int i = 0; i < STROKE_POINTS; i++)
+            clone.stroke[i] = stroke[i].clone();
+        clone.r = r;
+        clone.g = g;
+        clone.b = b;
+        clone.a = a;
+        clone.size = size;
+        return clone;
+    }
 
     public static Stroke generateRandom() {
         Stroke newStroke = new Stroke();
@@ -29,6 +42,7 @@ public class Stroke implements Comparable<Stroke> {
         newStroke.g = random.nextFloat();
         newStroke.b = random.nextFloat();
         newStroke.a = random.nextFloat();
+        newStroke.size = random.nextFloat();
         return newStroke;
     }
 
@@ -40,6 +54,7 @@ public class Stroke implements Comparable<Stroke> {
         newStroke.g = random.nextBoolean() ? s1.g : s2.g;
         newStroke.b = random.nextBoolean() ? s1.b : s2.b;
         newStroke.a = random.nextBoolean() ? s1.a : s2.a;
+        newStroke.size = random.nextBoolean() ? s1.size : s2.size;
         return newStroke;
     }
 
@@ -50,18 +65,21 @@ public class Stroke implements Comparable<Stroke> {
         g = Mutator.mutateFloat(g, limit);
         b = Mutator.mutateFloat(b, limit);
         a = Mutator.mutateFloat(a, limit);
+        size = Mutator.mutateFloat(size, limit);
     }
 
     public void drawStroke(Graphics g, int width, int height, int steps) {
         float stepSize = 1f/(float)steps;
-        g.setColor(new Color(r, this.g, b, a));
+        Graphics2D g2d = (Graphics2D)g;
+        g2d.setStroke(new BasicStroke(width/10 * size));
+        g2d.setColor(new Color(r, this.g, b, a));
         Point prev = stroke[0];
         for(int i = 0; i < steps; i++) {
             float progress = stepSize*((float)i);
             Point a = stroke[0].getProgress(stroke[1], progress);
             Point b = stroke[1].getProgress(stroke[2], progress);
             Point c = a.getProgress(b, progress);
-            g.drawLine((int)(prev.x * width), ((int)prev.y * height), ((int)c.x * width), ((int)c.y * height));
+            g2d.drawLine((int)(prev.x * width), (int)(prev.y * height), (int)(c.x * width), (int)(c.y * height));
             prev = c;
         }
     }
