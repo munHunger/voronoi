@@ -27,7 +27,7 @@ public class Voronoi {
 
     public static void main(String[] args) throws IOException {
         iconPanel = new JPanel(new GridLayout(10, 10));
-        originalImage = ImageIO.read(Voronoi.class.getClassLoader().getResource("ref1.jpg"));
+        originalImage = ImageIO.read(Voronoi.class.getClassLoader().getResource("ref2.jpg"));
         image = new BufferedImage(originalImage.getWidth() / 4, originalImage.getHeight() / 4, BufferedImage.TYPE_INT_RGB);
         image.getGraphics().drawImage(originalImage, 0, 0, image.getWidth(), image.getHeight(), null);
         generation = new Generation();
@@ -113,6 +113,6 @@ public class Voronoi {
             } catch (ExecutionException e) {
                 e.printStackTrace();
             }
-        return sum / (image1.getWidth() * image1.getHeight());
+        return 1f - (sum / (image1.getWidth() * image1.getHeight()));
     }
 }

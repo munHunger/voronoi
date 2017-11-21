@@ -9,7 +9,7 @@ import java.util.Random;
  * @author Marcus Münger
  */
 public class Picture implements Comparable<Picture> {
-    public static final int REGION_COUNT = 15;
+    public static final int REGION_COUNT = 50;
 
     public float regions[] = new float[REGION_COUNT*5];
 

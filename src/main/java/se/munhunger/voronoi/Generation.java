@@ -14,7 +14,7 @@ import java.util.concurrent.Semaphore;
  */
 public class Generation {
     public static final int GENERATION_SIZE = 500;
-    public static final float MUTATION_FACTOR = 0.2f;
+    public static final float MUTATION_FACTOR = 0.1f;
     public static final int ELITISM = 200;
     public static final int RANDOM_SAMPLES = 2;
 
