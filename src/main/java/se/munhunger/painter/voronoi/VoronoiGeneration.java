@@ -1,18 +1,18 @@
-package se.munhunger.voronoi;
+package se.munhunger.painter.voronoi;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
+import se.munhunger.painter.util.Generation;
 
+import java.awt.image.BufferedImage;
 import java.util.Arrays;
 import java.util.Random;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 import java.util.concurrent.Semaphore;
 
 /**
  * @author Marcus Münger
  */
-public class Generation {
+public class VoronoiGeneration implements Generation {
     public static final int GENERATION_SIZE = 500;
     public static final float MUTATION_FACTOR = 0.1f;
     public static final int ELITISM = 200;
@@ -23,6 +23,7 @@ public class Generation {
 
     int genCount = 0;
 
+    @Override
     public void initialize(){
         for(int i = 0; i < generation.length; i++)
             generation[i] = Picture.generateRandom();
@@ -36,6 +37,7 @@ public class Generation {
 
     private static ExecutorService threadPool = Executors.newFixedThreadPool(THREADS);
 
+    @Override
     public void step(int times){
 
         for(int i = 0; i < times; i++) {
@@ -73,6 +75,16 @@ public class Generation {
             }
             generation = newGen;
         }
+    }
+
+    @Override
+    public BufferedImage getBest(int width, int height) {
+        return getBest().toImage(width, height);
+    }
+
+    @Override
+    public int getGenerationCount() {
+        return genCount;
     }
 
     public Picture getBest() {

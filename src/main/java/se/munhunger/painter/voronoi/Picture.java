@@ -1,9 +1,10 @@
-package se.munhunger.voronoi;
+package se.munhunger.painter.voronoi;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.util.Arrays;
 import java.util.Random;
+
+import static se.munhunger.painter.util.Validator.calcSimilarity;
 
 /**
  * @author Marcus Münger
@@ -64,8 +65,8 @@ public class Picture implements Comparable<Picture> {
 
     @Override
     public int compareTo(Picture o) {
-        float thisSimilarity = similarity > 0 ? similarity : Voronoi.calcSimilarity(toImage(Voronoi.image.getWidth(), Voronoi.image.getHeight()), Voronoi.image);
-        float otherSimilarity = o.similarity > 0 ? o.similarity : Voronoi.calcSimilarity(o.toImage(Voronoi.image.getWidth(), Voronoi.image.getHeight()), Voronoi.image);
+        float thisSimilarity = similarity > 0 ? similarity : calcSimilarity(toImage(Voronoi.image.getWidth(), Voronoi.image.getHeight()), Voronoi.image);
+        float otherSimilarity = o.similarity > 0 ? o.similarity : calcSimilarity(o.toImage(Voronoi.image.getWidth(), Voronoi.image.getHeight()), Voronoi.image);
         similarity = thisSimilarity;
         o.similarity = otherSimilarity;
         return Float.compare(thisSimilarity, otherSimilarity) * -1;
