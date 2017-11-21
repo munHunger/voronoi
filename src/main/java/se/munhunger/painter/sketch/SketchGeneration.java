@@ -32,7 +32,7 @@ public class SketchGeneration implements Generation {
             copy.getGraphics().drawImage(image, image.getWidth(), image.getHeight(), null);
             generation.setImage(copy);
             generation.initialize();
-            generation.step(10);
+            generation.step(50);
             generation.getBest().drawStroke(image.getGraphics(), image.getWidth(), image.getHeight(), 100);
             strokes.add(generation.getBest().clone());
             genCount++;

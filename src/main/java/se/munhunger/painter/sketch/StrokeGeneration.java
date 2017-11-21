@@ -68,7 +68,7 @@ public class StrokeGeneration implements Generation {
             List<Stroke> newGen = new ArrayList<>();
             orderGeneration();
             for(int n = 0; n < ELITISM; n++)
-                newGen.add(Stroke.crossover(generation.get(0), generation.get(i+1)));
+                newGen.add(Stroke.crossover(generation.get(0), generation.get(n+1)));
 
             for(int n = newGen.size(); n < GENERATION_SIZE; n++)
                 newGen.add(Stroke.crossover(generation.get(random.nextInt(GENERATION_SIZE - 1)), generation.get(random.nextInt(GENERATION_SIZE - 1))));
